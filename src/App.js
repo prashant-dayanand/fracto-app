@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./assets/css/product.css";
+import "./assets/css/shop.css";
+import "./assets/css/style.css";
+import "./App.css";
+
+import Header from "./components/Header";
+import Shop from "./pages/Shop";
+import Product from "./pages/Product";
+import AddNft from "./pages/AddNft";
+import ProfileOwner from "./pages/ProfileOwner";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<Header />} />
+					<Route path="/shop" element={<Shop />} />
+					<Route path="/add-nft" element={<AddNft />} />
+					<Route path="/profile" element={<ProfileOwner />} />
+
+					<Route path="/product/:id" element={<Product />} />
+				</Routes>
+			</BrowserRouter>
+		</>
+	);
 }
 
 export default App;
