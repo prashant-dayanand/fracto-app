@@ -8,9 +8,9 @@ const Navbar = () => {
 	return (
 		<header className="header">
 			<input type="checkbox" name id="chk1" />
-			<a href="index.html" className="logo">
+			<Link className="logo" to="/">
 				Fracto
-			</a>
+			</Link>
 			<div className="search-box">
 				<form action>
 					<input type="text" name="search" id="srch" placeholder="SEARCH" />

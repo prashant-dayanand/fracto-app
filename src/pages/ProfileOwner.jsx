@@ -11,7 +11,7 @@ const ProfileOwner = () => {
 			<div className="bg-white mt-56">
 				<section className="container">
 					<div className="mt-20 flex">
-						<img src={IMG} alt="" className="w-80 rounded" />
+						<img src={IMG} alt="" className="w-80 rounded-xl" />
 						<div className="ml-6 text-left">
 							<h3 className="text-6xl font-bold">Unnamed</h3>
 							<p className="text-xl text-gray-400 mt-3">
@@ -26,6 +26,7 @@ const ProfileOwner = () => {
 					</div>
 				</section>
 				<section>
+					<h2 className="mt-4 mb-4 text-4xl font-bold">Created NFTs</h2>
 					<table class="styled-table">
 						<thead>
 							<tr>
