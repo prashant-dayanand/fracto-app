@@ -9,6 +9,8 @@ import Shop from "./pages/Shop";
 import Product from "./pages/Product";
 import AddNft from "./pages/AddNft";
 import ProfileOwner from "./pages/ProfileOwner";
+import EditProfileAdmin from "./pages/EditProfileAdmin";
+import SellNft from "./pages/SellNft";
 
 function App() {
 	return (
@@ -19,8 +21,10 @@ function App() {
 					<Route path="/shop" element={<Shop />} />
 					<Route path="/add-nft" element={<AddNft />} />
 					<Route path="/profile" element={<ProfileOwner />} />
+					<Route path="/sell" element={<SellNft />} />
 
 					<Route path="/product/:id" element={<Product />} />
+					<Route path="/profile-admin/:id" element={<EditProfileAdmin />} />
 				</Routes>
 			</BrowserRouter>
 		</>

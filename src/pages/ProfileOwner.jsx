@@ -1,10 +1,12 @@
 import React from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-
 import IMG from "../assets/image/1.png";
 
+import { useNavigate } from "react-router-dom";
+
 const ProfileOwner = () => {
+	const navigate = useNavigate();
 	return (
 		<>
 			<Navbar />
@@ -19,8 +21,24 @@ const ProfileOwner = () => {
 							</p>
 							<p className="text-2xl text-gray-600 mt-2">Joined April 2023</p>
 							<div className="mt-8">
-								<button className="profile-btn">Add NFT</button>
-								<button className="profile-btn">Edit Profile</button>
+								<button
+									className="profile-btn"
+									onClick={() => navigate("/add-nft")}
+								>
+									Add NFT
+								</button>
+								<button
+									className="profile-btn"
+									onClick={() => navigate("/profile-admin/2")}
+								>
+									Edit Profile
+								</button>
+								<button
+									className="profile-btn"
+									onClick={() => navigate("/sell")}
+								>
+									Sell NFT
+								</button>
 							</div>
 						</div>
 					</div>
