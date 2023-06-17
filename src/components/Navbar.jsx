@@ -1,12 +1,88 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "./Modal/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoginState } from "../services/slices/constants";
 
 const Navbar = () => {
+	const navigate = useNavigate();
+
+	const loginState = useSelector((state) => state?.constants?.loginState);
 	const [roleStatus, setRoleStatus] = useState(0);
 	const [isShow, setIsShow] = useState(false);
+	const dispatch = useDispatch();
 
-	console.log(isShow);
+	console.log(loginState, "loginState");
+
+	const [show, setShow] = useState(false);
+	const [showMetaMaskModal, setShowMetaMaskModal] = useState(false);
+	const [connectState, setConnectState] = useState(1);
+	const [isMetamaskConnected, setIsMetamaskConnected] = useState(true);
+	const [address, setAddress] = useState("");
+	const [walletBalance, setWalletBalance] = useState();
+
+	const getbalance = async (walletAdress) => {
+		await window.ethereum
+			.request({
+				method: "eth_getBalance",
+				params: [walletAdress, "latest"],
+			})
+			.then((balance) => {
+				setWalletBalance(ethers.utils.formatEther(balance));
+			});
+	};
+
+	const accountChangehandleUserConnect = async (account) => {
+		setAddress(account);
+		getbalance(account);
+		navigate("/");
+	};
+
+	// useEffect(() => {
+	// 	dispatch(setLoginState(0));
+	// }, []);
+
+	useEffect(() => {
+		const handleAccountsChanged = (accounts) => {
+			if (accounts.length === 0) {
+				dispatch(setLoginState(0));
+			}
+		};
+
+		const provider = window.ethereum;
+		if (provider) {
+			provider.on("accountsChanged", handleAccountsChanged);
+		}
+
+		return () => {
+			if (provider) {
+				provider.removeListener("accountsChanged", handleAccountsChanged);
+			}
+		};
+	}, []);
+
+	const connectToWallet = async () => {
+		if (window.ethereum && window.ethereum !== "undefined") {
+			setShowMetaMaskModal(false);
+			setIsMetamaskConnected(false);
+			setLoginState(false);
+			window.ethereum.request({ method: "eth_requestAccounts" }).then((res) => {
+				if (res[0]) {
+					accountChangehandleUserConnect(res[0]);
+					dispatch(setLoginState(1));
+					navigate("/");
+				} else {
+					alert("Please connect to metamask or restart your browser.");
+				}
+			});
+		} else {
+			setShowMetaMaskModal(true);
+		}
+	};
+
+	console.log(walletBalance, "walletBalance");
+
 	return (
 		<>
 			<header className="header">
@@ -30,7 +106,7 @@ const Navbar = () => {
 						<Link to="/shop">SHOP</Link>
 					</li>
 
-					{roleStatus === 1 ? (
+					{loginState === 1 ? (
 						<>
 							<div>
 								<li>
@@ -48,7 +124,7 @@ const Navbar = () => {
 							</Link>
 						</>
 					) : (
-						<li onClick={() => setRoleStatus(1)}>
+						<li onClick={connectToWallet}>
 							<button>Connect</button>
 						</li>
 					)}

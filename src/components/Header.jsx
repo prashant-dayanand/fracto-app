@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { ethers } from "ethers";
 
 import HEAD_IMG from "../assets/image/image15.png";
 import HOME_BACK from "../assets/image/bg2.png";
