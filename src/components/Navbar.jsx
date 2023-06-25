@@ -3,24 +3,34 @@ import { ethers } from "ethers";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "./Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoginState } from "../services/slices/constants";
+import {
+	setLoginState,
+	setProfileData,
+	setWalletInfo,
+} from "../services/slices/constants";
+import { useConnectMutation, useDisconnectMutation } from "../services/apis";
+import WalletIcon from "../assets/image/plolygon.png";
 
 const Navbar = () => {
 	const navigate = useNavigate();
+	const profileData = useSelector((state) => state.constants.profileData);
+
+	const [connect, { data }] = useConnectMutation();
+	const { disconnect } = useDisconnectMutation();
 
 	const loginState = useSelector((state) => state?.constants?.loginState);
+	const walletInfo = useSelector((state) => state?.constants?.walletInfo);
 	const [roleStatus, setRoleStatus] = useState(0);
 	const [isShow, setIsShow] = useState(false);
 	const dispatch = useDispatch();
-
-	console.log(loginState, "loginState");
-
 	const [show, setShow] = useState(false);
 	const [showMetaMaskModal, setShowMetaMaskModal] = useState(false);
 	const [connectState, setConnectState] = useState(1);
 	const [isMetamaskConnected, setIsMetamaskConnected] = useState(true);
 	const [address, setAddress] = useState("");
-	const [walletBalance, setWalletBalance] = useState();
+	const [walletBalance, setWalletBalance] = useState(0);
+
+	console.log("address", data);
 
 	const getbalance = async (walletAdress) => {
 		await window.ethereum
@@ -30,6 +40,12 @@ const Navbar = () => {
 			})
 			.then((balance) => {
 				setWalletBalance(ethers.utils.formatEther(balance));
+				dispatch(
+					setWalletInfo({
+						address: walletAdress,
+						balance: ethers.utils.formatEther(balance),
+					})
+				);
 			});
 	};
 
@@ -47,6 +63,8 @@ const Navbar = () => {
 		const handleAccountsChanged = (accounts) => {
 			if (accounts.length === 0) {
 				dispatch(setLoginState(0));
+				// disconnect();
+				navigate("/");
 			}
 		};
 
@@ -62,6 +80,22 @@ const Navbar = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (data?.success) {
+			dispatch(setProfileData(data));
+		}
+		if (data?.success && data?.data?.role === "user") {
+			localStorage.setItem("token", data?.accessToken);
+			navigate("/profile");
+		}
+
+		if (data?.success && data?.data?.role === "admin") {
+			localStorage.setItem("token", data?.accessToken);
+
+			navigate("/admin");
+		}
+	}, [data]);
+
 	const connectToWallet = async () => {
 		if (window.ethereum && window.ethereum !== "undefined") {
 			setShowMetaMaskModal(false);
@@ -70,8 +104,15 @@ const Navbar = () => {
 			window.ethereum.request({ method: "eth_requestAccounts" }).then((res) => {
 				if (res[0]) {
 					accountChangehandleUserConnect(res[0]);
+					setAddress(res[0]);
 					dispatch(setLoginState(1));
-					navigate("/");
+
+					console.log("address");
+					connect({
+						wallet_address: res[0],
+					});
+
+					console.log("TOKKKKK", data);
 				} else {
 					alert("Please connect to metamask or restart your browser.");
 				}
@@ -80,8 +121,6 @@ const Navbar = () => {
 			setShowMetaMaskModal(true);
 		}
 	};
-
-	console.log(walletBalance, "walletBalance");
 
 	return (
 		<>
@@ -115,7 +154,9 @@ const Navbar = () => {
 									</button>
 								</li>
 							</div>
-							<Link to="/profile">
+							<Link
+								to={profileData?.data?.role === "admin" ? "/admin" : "/profile"}
+							>
 								<li className="ml-8 text-2xl">
 									<button>
 										<i class="fa-solid fa-user"></i>
@@ -141,10 +182,22 @@ const Navbar = () => {
 					<div className="fas" id="login-btn" />
 				</div>
 			</header>
+
 			<Modal show={isShow} onClose={() => setIsShow(false)}>
 				<div className="flex items-center p-8 justify-center flex-col">
-					<p className="text-2xl">Wallet Balance</p> <br />
-					<h2 className="text-3xl font-bold">30 ETH</h2>
+					<div className="pb-20 text-center">
+						<span className="text-4xl font-bold">Set Display Name</span>
+						<div className="mt-6 text-gray-700 text-2xl">
+							<span>{walletInfo?.address}</span>
+						</div>
+					</div>
+					<div className="text-center border-solid border-2 border-gray-300 py-8 px-28">
+						<p className="text-2xl">Wallet Balance</p> <br />
+						<img src={WalletIcon} alt="" className="w-16 mx-auto mb-4" />
+						<h2 className="text-5xl font-bold">
+							{(Math.round(walletInfo?.balance * 100) / 100).toFixed(2)} MATIC
+						</h2>
+					</div>
 				</div>
 			</Modal>
 		</>

@@ -11,6 +11,8 @@ import AddNft from "./pages/AddNft";
 import ProfileOwner from "./pages/ProfileOwner";
 import EditProfileAdmin from "./pages/EditProfileAdmin";
 import SellNft from "./pages/SellNft";
+import UserProfile from "./pages/UserProfile";
+import AddCategory from "./pages/AddCategory";
 
 function App() {
 	return (
@@ -25,6 +27,8 @@ function App() {
 
 					<Route path="/product/:id" element={<Product />} />
 					<Route path="/profile-admin/:id" element={<EditProfileAdmin />} />
+					<Route path="/admin" element={<UserProfile />} />
+					<Route path="/add-category" element={<AddCategory />} />
 				</Routes>
 			</BrowserRouter>
 		</>

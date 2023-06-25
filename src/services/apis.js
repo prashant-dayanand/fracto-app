@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const baseQuery = fetchBaseQuery({
-	baseUrl: process.env.REACT_APP_URL,
+	baseUrl: "http://localhost:4000",
 	prepareHeaders: (headers) => {
 		const token = localStorage.getItem("token");
 		headers.set("Authorization", `Bearer ${token}`);
@@ -22,14 +22,83 @@ export const fractoApis = createApi({
 	// skip: true,
 	// refetchOnFocus: true,
 	endpoints: (builder) => ({
-		login: builder.mutation({
+		connect: builder.mutation({
 			query: (data) => ({
-				url: "/login",
+				url: "/user/user",
 				method: "POST",
 				body: data,
+			}),
+		}),
+		addCategory: builder.mutation({
+			query: (data) => ({
+				url: "/collection/addCollection",
+				method: "POST",
+				body: data,
+			}),
+		}),
+
+		editProfile: builder.mutation({
+			query: (data) => ({
+				url: "/user/editUserProfile",
+				method: "PUT",
+				body: data,
+			}),
+		}),
+
+		addNft: builder.mutation({
+			query: (data) => ({
+				url: "/nft/nft",
+				method: "POST",
+				body: data,
+			}),
+		}),
+
+		disconnect: builder.mutation({
+			query: (data) => ({
+				url: "/user/disconnect",
+				method: "POST",
+				body: data,
+			}),
+		}),
+
+		listCategory: builder.query({
+			query: () => ({
+				url: "/collection/allCollections",
+				method: "GET",
+			}),
+		}),
+
+		nftList: builder.query({
+			query: () => ({
+				url: "nft/listNft",
+				method: "GET",
+			}),
+		}),
+
+		userList: builder.query({
+			query: () => ({
+				url: "/user/listAllUsers",
+				method: "GET",
+			}),
+		}),
+
+		getProfile: builder.query({
+			query: (data) => ({
+				url: `/user/getUserProfile?id=${data}`,
+				method: "GET",
 			}),
 		}),
 	}),
 });
 
-export const { useLoginMutation } = fractoApis;
+export const {
+	useConnectMutation,
+	useAddCategoryMutation,
+	useListCategoryQuery,
+	useUserListQuery,
+	useAddNftMutation,
+	useNftListQuery,
+	useEditProfileMutation,
+	useGetProfileQuery,
+	useDisconnectMutation,
+} = fractoApis;

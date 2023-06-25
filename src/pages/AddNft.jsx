@@ -1,9 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import IMG from "../assets/image/1.png";
+import { v4 as uuidv4 } from "uuid";
+import { useEffect } from "react";
+import { useListCategoryQuery, useAddNftMutation } from "../services/apis";
 
 const AddNft = () => {
+	const { data: listCat, refetch: listLoad } = useListCategoryQuery();
+	const [addNft, { data }] = useAddNftMutation();
+	const [image, setImage] = useState("");
+	const [imageUrl, setImageUrl] = useState("");
+	const [name, setName] = useState("");
+	const [description, setDescription] = useState("");
+	const [link, setLink] = useState("");
+	const [category, setCategory] = useState("");
+	const [uuid, setUUid] = useState();
+
+	useEffect(() => {
+		setUUid(uuidv4());
+		listLoad();
+	}, []);
+
+	const handleImage = (event) => {
+		const newFile = event.target.files[0];
+		setImage(newFile);
+		setImageUrl(URL.createObjectURL(newFile));
+	};
+
+	useEffect(() => {
+		if (data?.success) {
+			alert("Nft created successfully");
+		}
+	}, [data]);
+
+	const handleNft = () => {
+		const formdata = new FormData();
+		formdata.append("category_id", category);
+		formdata.append("nft_name", name);
+		formdata.append("external_link", link);
+		formdata.append("description", description);
+		formdata.append("token_id", uuid);
+		formdata.append("nft_images", image);
+		addNft(formdata);
+	};
+
 	return (
 		<>
 			<Navbar />
@@ -35,8 +76,14 @@ const AddNft = () => {
 										Upload your NFT image
 										{/* <span className="text-blue-600 underline">browse</span> */}
 									</span>
+									<img src={imageUrl} alt="" />
 								</span>
-								<input type="file" name="file_upload" className="hidden" />
+								<input
+									type="file"
+									name="file_upload"
+									className="hidden"
+									onChange={handleImage}
+								/>
 							</label>
 							<p className="mt-3">
 								File types supported: JPG, PNG, GIF. Max size: 100 MB
@@ -47,11 +94,15 @@ const AddNft = () => {
 							<p className="mb-3">
 								This is Auto Generated and used for your NFT identification
 							</p>
-							<input type="text" value={"asdf-123-asdf-123"} />
+							<input type="text" value={uuid} />
 						</div>
 						<div className="form-box">
 							<label htmlFor="">NFT Name</label>
-							<input type="text" />
+							<input
+								type="text"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+							/>
 						</div>
 						<div className="form-box">
 							<label htmlFor="">Description</label>
@@ -59,7 +110,14 @@ const AddNft = () => {
 								The description will be included on the item's detail page
 								underneath its image.
 							</p>
-							<textarea name="" id="" cols="30" rows="10"></textarea>
+							<textarea
+								name=""
+								id=""
+								cols="30"
+								rows="10"
+								value={description}
+								onChange={(e) => setDescription(e.target.value)}
+							></textarea>
 						</div>
 						<div className="form-box">
 							<label htmlFor="">External Link</label>
@@ -67,26 +125,34 @@ const AddNft = () => {
 								It will include a link to this URL on this item's detail page,
 								so that users can click to learn more about it.
 							</p>
-							<input type="text" />
+							<input
+								type="text"
+								value={link}
+								onChange={(e) => setLink(e.target.valuee)}
+							/>
 						</div>
 
 						<div className="form-box">
 							<label htmlFor="">Category</label>
 							<p>This is the Category where your item will appear.</p>
 
-							<select name="" id="">
-								<option value="">Category 1</option>
-								<option value="">Category 2</option>
-
-								<option value="">Category 3</option>
-
-								<option value="">Category 4</option>
+							<select
+								name=""
+								id=""
+								onChange={(e) => setCategory(e.target.value)}
+							>
+								{listCat?.data?.length > 0 &&
+									listCat?.data?.map((item) => {
+										return <option value={item?._id}>{item?.name}</option>;
+									})}
 							</select>
 						</div>
 					</form>
 					<div className="form-button">
 						<button className="profile-btn">Cancel</button>
-						<button className="profile-btn">Submit</button>
+						<button className="profile-btn" onClick={handleNft}>
+							Submit
+						</button>
 					</div>
 				</div>
 			</section>
