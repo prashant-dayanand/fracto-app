@@ -38,7 +38,7 @@ const UserProfile = () => {
 			<Navbar />
 			<div className="bg-white mt-56">
 				<section className="container">
-					<div className="mt-20 flex">
+					<div className="mt-20 flex items-center">
 						<img
 							src={
 								data?.data?.display_picture
@@ -46,9 +46,9 @@ const UserProfile = () => {
 									: IMG
 							}
 							alt=""
-							className="w-80 rounded-xl"
+							className="w-80 h-80 rounded-full shadow-2xl"
 						/>
-						<div className="ml-6 text-left">
+						<div className="ml-10 text-left">
 							<h3 className="text-6xl font-bold">
 								{data?.data?.name || "Unnamed"}
 							</h3>

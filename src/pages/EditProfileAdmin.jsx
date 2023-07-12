@@ -42,11 +42,12 @@ const EditProfileAdmin = () => {
 		setName(profileInfo?.data?.name);
 		setEmail(profileInfo?.data?.email);
 		setOccupation(profileInfo?.data?.occupation);
-		setBio(profileInfo?.data?.description);
+		setBio(profileInfo?.data?.bio);
 		setImageUrl(
 			`http://localhost:4000/public/userImage/${profileInfo?.data?.display_picture}`
 		);
 		setPhone(profileInfo?.data?.phone_no);
+		setLink(profileInfo?.data?.link);
 	}, [profileInfo]);
 
 	const handleSubmit = () => {
@@ -54,7 +55,7 @@ const EditProfileAdmin = () => {
 		formData.append("phone_no", phone);
 		formData.append("name", name);
 		formData.append("display_picture", image);
-		formData.append("description", bio);
+		formData.append("bio", bio);
 		formData.append("email", email);
 		formData.append("link", link);
 		formData.append("occupation", occupation);

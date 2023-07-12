@@ -33,7 +33,7 @@ const Header = () => {
 						</a>
 					</div>
 				</section>
-				<section className="video" id="products">
+				{/* <section className="video" id="products">
 					<div className="video-slider">
 						<div className="swiper-wrapper">
 							<div className="swiper-slide box">
@@ -41,15 +41,15 @@ const Header = () => {
 							</div>
 						</div>
 					</div>
-				</section>
-				<Gallery />
+				</section> */}
+				{/* <Gallery /> */}
 				<Collection />
 				<Trending />
-				<Category />
-				<section className="chart">
+				{/* <Category /> */}
+				{/* <section className="chart">
 					<img src={CHART_IMG} alt />
-				</section>
-				<section className="doller">
+				</section> */}
+				{/* <section className="doller">
 					<div className="box-container">
 						<div className="box">
 							<h1>$64.1B</h1>
@@ -64,7 +64,7 @@ const Header = () => {
 							<p>Wealth managers surveyed recommend investing in Art</p>
 						</div>
 					</div>
-				</section>
+				</section> */}
 				<Footer />
 			</div>
 		</>
