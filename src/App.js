@@ -26,7 +26,7 @@ function App() {
 					<Route path="/sell" element={<SellNft />} />
 
 					<Route path="/product/:id" element={<Product />} />
-					<Route path="/profile-admin/:id" element={<EditProfileAdmin />} />
+					<Route path="/edit-profile/:id" element={<EditProfileAdmin />} />
 					<Route path="/admin" element={<UserProfile />} />
 					<Route path="/add-category" element={<AddCategory />} />
 				</Routes>

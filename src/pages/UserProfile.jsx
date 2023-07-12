@@ -68,7 +68,9 @@ const UserProfile = () => {
 								</button>
 								<button
 									className="profile-btn"
-									onClick={() => navigate("/profile-admin/2")}
+									onClick={() =>
+										navigate(`/edit-profile/${profileData?.data?._id}`)
+									}
 								>
 									Edit Profile
 								</button>

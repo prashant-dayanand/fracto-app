@@ -6,19 +6,19 @@ import { useEditProfileMutation, useGetProfileQuery } from "../services/apis";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const EditProfileAdmin = () => {
 	const navigate = useNavigate();
+	const { id } = useParams();
 	const [editProfile, { data }] = useEditProfileMutation();
 
 	const profileData = useSelector((state) => state.constants.profileData);
-	const { data: profileInfo, refetch } = useGetProfileQuery(
-		profileData?.data?._id
-	);
+	const { data: profileInfo, refetch } = useGetProfileQuery(id);
 
 	useEffect(() => {
 		refetch();
-	}, []);
+	}, [id]);
 
 	console.log(profileInfo, "XXXXXX");
 	const [name, setName] = useState("");
