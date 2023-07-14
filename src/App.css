@@ -143,3 +143,43 @@ label.label input[type="file"] {
 .label:valid + span {
 	color: #ffffff;
 }
+
+button.swal-button.swal-button--confirm {
+	background: linear-gradient(98.04deg, #3c1960 -9.26%, #a12669 58.73%);
+	color: #fff;
+	text-decoration: none;
+	padding: 12px 10px;
+	border-radius: 20px;
+	display: block;
+	width: 30%;
+	margin: 0 auto;
+}
+button.swal-button.swal-button--confirm:hover {
+	background: #4472c7;
+	border-color: #4472c7;
+}
+.swal-button:focus {
+	box-shadow: none;
+}
+.swal-button-container {
+	margin: 5px;
+	display: block;
+	position: relative;
+	text-align: center;
+}
+
+.swal-modal {
+	border-radius: 20px;
+}
+
+.nft-collection {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 2em;
+	margin-top: 2em;
+	box-shadow: rgb(0 0 0 / 8%) 0px 4px 16px;
+}
+
+.nft-collection div {
+	box-shadow: rgb(0 0 0 / 8%) 0px 4px 16px;
+}

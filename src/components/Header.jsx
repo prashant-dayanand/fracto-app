@@ -11,6 +11,7 @@ import Navbar from "./Navbar";
 import Gallery from "./Gallery";
 import Category from "./Category";
 import Footer from "./Footer";
+import TrendingCollection from "./TrendingCollection";
 
 const Header = () => {
 	return (
@@ -43,7 +44,8 @@ const Header = () => {
 					</div>
 				</section> */}
 				{/* <Gallery /> */}
-				<Collection />
+				{/* <Collection /> */}
+				<TrendingCollection />
 				<Trending />
 				{/* <Category /> */}
 				{/* <section className="chart">

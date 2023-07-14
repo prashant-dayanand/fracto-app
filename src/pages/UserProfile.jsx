@@ -107,34 +107,6 @@ const UserProfile = () => {
 								<td>GIGJGJI...UIU</td>
 								<td>View</td>
 							</tr>
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>{" "}
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>{" "}
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>{" "}
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>
 						</tbody>
 					</table>
 				</section>

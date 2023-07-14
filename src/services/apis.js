@@ -37,6 +37,14 @@ export const fractoApis = createApi({
 			}),
 		}),
 
+		editCollection: builder.mutation({
+			query: (data) => ({
+				url: "/collection/editCollection",
+				method: "POST",
+				body: data,
+			}),
+		}),
+
 		editProfile: builder.mutation({
 			query: (data) => ({
 				url: "/user/editUserProfile",
@@ -88,6 +96,13 @@ export const fractoApis = createApi({
 				method: "GET",
 			}),
 		}),
+
+		collectionById: builder.query({
+			query: (data) => ({
+				url: `/collection/collection?id=${data}`,
+				method: "GET",
+			}),
+		}),
 	}),
 });
 
@@ -101,4 +116,6 @@ export const {
 	useEditProfileMutation,
 	useGetProfileQuery,
 	useDisconnectMutation,
+	useCollectionByIdQuery,
+	useEditCollectionMutation,
 } = fractoApis;

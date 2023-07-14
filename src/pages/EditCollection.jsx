@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import IMG from "../assets/image/1.png";
-import { useAddCategoryMutation } from "../services/apis";
+import IMG from "../assets/image/collection-dummy.png";
+import { PopUp } from "../utils/alert";
+import {
+	useCollectionByIdQuery,
+	useEditCollectionMutation,
+} from "../services/apis";
 
-import { useNavigate } from "react-router-dom";
-import UserList from "./UserList";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditCollection = () => {
 	const navigate = useNavigate();
-	const [addCotegory, { data }] = useAddCategoryMutation();
+	const { id } = useParams();
+	const [editCollection, { data }] = useEditCollectionMutation();
+
+	const { data: listCat, refetch: listLoad } = useCollectionByIdQuery(id);
 
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -23,19 +29,49 @@ const EditCollection = () => {
 		setImageUrl(URL.createObjectURL(newFile));
 	};
 
+	useEffect(() => {
+		listLoad();
+	}, [id]);
+
+	useEffect(() => {
+		setTitle(listCat?.data?.name);
+		setDescription(listCat?.data?.description);
+		setImageUrl(
+			`http://localhost:4000/public/collectionImage/${listCat?.data?.image}`
+		);
+
+		setImage(`${listCat?.data?.image}`);
+	}, [listCat]);
+
 	const handleCategory = (e) => {
+		e.preventDefault();
+
+		if (!image) {
+			PopUp("Please select image", "", "error");
+			return;
+		}
+
+		if (!title) {
+			PopUp("Please enter collection name", "", "error");
+			return;
+		}
+
+		if (!description) {
+			PopUp("Please enter description", "", "error");
+			return;
+		}
 		const formData = new FormData();
 		formData.append("name", title);
 		formData.append("image", image);
 		formData.append("description", description);
+		formData.append("collection_id", id);
 
-		e.preventDefault();
-		addCotegory(formData);
+		editCollection(formData);
 	};
 
 	useEffect(() => {
 		if (data?.success) {
-			alert("Category created successfully");
+			PopUp("Collection edit successfully", "", "success");
 			navigate("/admin");
 		}
 	}, [data]);

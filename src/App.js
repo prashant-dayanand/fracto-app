@@ -10,9 +10,11 @@ import Product from "./pages/Product";
 import AddNft from "./pages/AddNft";
 import ProfileOwner from "./pages/ProfileOwner";
 import EditProfileAdmin from "./pages/EditProfileAdmin";
+import EditCollection from "./pages/EditCollection";
 import SellNft from "./pages/SellNft";
 import UserProfile from "./pages/UserProfile";
 import AddCategory from "./pages/AddCategory";
+import ViewCollection from "./pages/ViewCollection";
 
 function App() {
 	return (
@@ -27,8 +29,11 @@ function App() {
 
 					<Route path="/product/:id" element={<Product />} />
 					<Route path="/edit-profile/:id" element={<EditProfileAdmin />} />
+					<Route path="/edit-collection/:id" element={<EditCollection />} />
+
 					<Route path="/admin" element={<UserProfile />} />
 					<Route path="/add-category" element={<AddCategory />} />
+					<Route path="/collection/:id" element={<ViewCollection />} />
 				</Routes>
 			</BrowserRouter>
 		</>

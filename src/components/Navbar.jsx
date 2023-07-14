@@ -10,9 +10,12 @@ import {
 } from "../services/slices/constants";
 import { useConnectMutation, useDisconnectMutation } from "../services/apis";
 import WalletIcon from "../assets/image/plolygon.png";
+import Logo from "../assets/image/logo.png";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const profileData = useSelector((state) => state.constants.profileData);
 
 	const [connect, { data }] = useConnectMutation();
@@ -31,6 +34,10 @@ const Navbar = () => {
 	const [walletBalance, setWalletBalance] = useState(0);
 
 	console.log("address", data);
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [location]);
 
 	const getbalance = async (walletAdress) => {
 		await window.ethereum
@@ -127,11 +134,16 @@ const Navbar = () => {
 			<header className="header">
 				<input type="checkbox" name id="chk1" />
 				<Link className="logo" to="/">
-					Fracto
+					<img src={Logo} alt="" style={{ width: "130px" }} />
 				</Link>
 				<div className="search-box">
 					<form action>
-						<input type="text" name="search" id="srch" placeholder="SEARCH" />
+						<input
+							type="text"
+							name="search"
+							id="srch"
+							placeholder="Search NFTs"
+						/>
 						<button type="submit">
 							<i className="fa fa-arrow-right" />
 						</button>

@@ -29,9 +29,16 @@ const Users = ({ reload }) => {
 								<tr>
 									<td>{index + 1}</td>
 									<td>
-										<div className="h-20 w-20 bg-gray-200"></div>
+										{item?.display_picture ? (
+											<img
+												src={`http://localhost:4000/public/userImage/${item?.display_picture}`}
+												className="h-20 w-20 bg-gray-200"
+											/>
+										) : (
+											<div className="h-20 w-20 bg-gray-200"></div>
+										)}
 									</td>
-									<td>{item?.name}</td>
+									<td>{item?.name || "No Name"}</td>
 									<td>{item?.wallet_address}</td>
 									<td>View</td>
 								</tr>

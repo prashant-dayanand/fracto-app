@@ -5,6 +5,7 @@ import IMG from "../assets/image/1.png";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
 import { useListCategoryQuery, useAddNftMutation } from "../services/apis";
+import { PopUp } from "../utils/alert";
 
 const AddNft = () => {
 	const { data: listCat, refetch: listLoad } = useListCategoryQuery();
@@ -15,10 +16,17 @@ const AddNft = () => {
 	const [description, setDescription] = useState("");
 	const [link, setLink] = useState("");
 	const [category, setCategory] = useState("");
-	const [uuid, setUUid] = useState();
+	const [uuid, setUUid] = useState(0);
 
 	useEffect(() => {
-		setUUid(uuidv4());
+		function generateRandomNumber() {
+			let randomNumber =
+				Math.floor(Math.random() * 9000000000000) + 100000000000;
+			return randomNumber;
+		}
+
+		var randomNum = generateRandomNumber();
+		setUUid(randomNum);
 		listLoad();
 	}, []);
 
@@ -35,6 +43,30 @@ const AddNft = () => {
 	}, [data]);
 
 	const handleNft = () => {
+		if (!image) {
+			PopUp("Please select image", "", "error");
+			return;
+		}
+
+		if (!name) {
+			PopUp("Please enter name", "", "error");
+			return;
+		}
+
+		if (!description) {
+			PopUp("Please enter description", "", "error");
+			return;
+		}
+
+		if (!link) {
+			PopUp("Please enetr link", "", "error");
+			return;
+		}
+
+		if (!category) {
+			PopUp("Please select category", "", "error");
+			return;
+		}
 		const formdata = new FormData();
 		formdata.append("category_id", category);
 		formdata.append("nft_name", name);
@@ -45,6 +77,7 @@ const AddNft = () => {
 		addNft(formdata);
 	};
 
+	console.log(category, "XXXXXXXXXXXXXXXXXXXX");
 	return (
 		<>
 			<Navbar />

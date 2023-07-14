@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import IMG from "../assets/image/1.png";
+import IMG from "../assets/image/user-dummy.png";
 
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -39,7 +39,7 @@ const ProfileOwner = () => {
 									: IMG
 							}
 							alt=""
-							className="w-80 h-80 rounded-full shadow-2xl"
+							className="w-80 h-80 rounded-full shadow-lg"
 						/>
 						<div className="ml-10 text-left">
 							<h3 className="text-6xl font-bold">

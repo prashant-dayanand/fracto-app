@@ -24,7 +24,7 @@ const Footer = () => {
       <a href="#" class="fab fa-twitter"></a>
       <a href="#" class="fab fa-instagram"></a>
       <a href="#" class="fab fa-linkedin"></a> */}
-						<h3>LOGO</h3>
+						<h3>ArtEquitus</h3>
 						<p>
 							The world’s first and largest digital marketplace for crypto
 							collectibles and non-fungible tokens (NFTs). Buy, sell, and

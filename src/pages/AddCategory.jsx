@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import IMG from "../assets/image/1.png";
+import IMG from "../assets/image/collection-dummy.png";
 import { useAddCategoryMutation } from "../services/apis";
-
+import { PopUp } from "../utils/alert";
 import { useNavigate } from "react-router-dom";
 import UserList from "./UserList";
 
@@ -24,18 +24,33 @@ const AddCategory = () => {
 	};
 
 	const handleCategory = (e) => {
+		e.preventDefault();
+
+		if (!image) {
+			PopUp("Please select image", "", "error");
+			return;
+		}
+
+		if (!title) {
+			PopUp("Please enter collection name", "", "error");
+			return;
+		}
+
+		if (!description) {
+			PopUp("Please enter description", "", "error");
+			return;
+		}
 		const formData = new FormData();
 		formData.append("name", title);
 		formData.append("image", image);
 		formData.append("description", description);
 
-		e.preventDefault();
 		addCotegory(formData);
 	};
 
 	useEffect(() => {
 		if (data?.success) {
-			alert("Category created successfully");
+			PopUp("Category created successfully", "", "success");
 			navigate("/admin");
 		}
 	}, [data]);
