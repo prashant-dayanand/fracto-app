@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { PopUp } from "../utils/alert";
 
 const EditProfileAdmin = () => {
 	const navigate = useNavigate();
@@ -64,7 +65,7 @@ const EditProfileAdmin = () => {
 
 	useEffect(() => {
 		if (data?.success) {
-			alert("Profile edit successfully");
+			PopUp("Profile edit successfully", "", "success");
 			if (profileData?.data?.role === "admin") {
 				navigate("/admin");
 			}
@@ -86,7 +87,7 @@ const EditProfileAdmin = () => {
 					<div className="form-box">
 						<div className="w-1/2 cat-img">
 							<img
-								src={profileInfo?.data?.display_picture ? imageUrl : IMG}
+								src={imageUrl || IMG}
 								alt=""
 								className="w-full rounded-xl"
 								style={{ height: "300px" }}

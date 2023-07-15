@@ -8,10 +8,11 @@ import { useNavigate } from "react-router-dom";
 import UserList from "./UserList";
 import Users from "./Users";
 import { useSelector } from "react-redux";
-import { useGetProfileQuery } from "../services/apis";
+import { useGetProfileQuery, useNftListQuery } from "../services/apis";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setLoginState } from "../services/slices/constants";
+import MintedNfts from "./MintedNfts";
 
 const UserProfile = () => {
 	const dispatch = useDispatch();
@@ -20,12 +21,14 @@ const UserProfile = () => {
 	const profileData = useSelector((state) => state.constants.profileData);
 
 	const { data, refetch } = useGetProfileQuery(profileData?.data?._id);
+	const { data: nftData, refetch: nftLoad } = useNftListQuery();
 
 	useEffect(() => {
 		refetch();
+		nftLoad();
 	}, []);
 
-	console.log(data, "XXXXXX");
+	console.log(nftData, "nftData");
 
 	const handleLogout = () => {
 		dispatch(setLoginState(0));
@@ -87,29 +90,7 @@ const UserProfile = () => {
 						</div>
 					</div>
 				</section>
-				<section>
-					<h2 className="mt-4 mb-4 text-4xl font-bold">Created NFTs</h2>
-					<table class="styled-table">
-						<thead>
-							<tr>
-								<th>SN</th>
-								<th>NFT NAME</th>
-								<th>PRICE</th>
-								<th>ADDRESS</th>
-								<th>ACTION</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>
-						</tbody>
-					</table>
-				</section>
+				<MintedNfts />
 				<Users />
 				<UserList />
 			</div>

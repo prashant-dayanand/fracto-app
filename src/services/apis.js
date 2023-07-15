@@ -97,6 +97,13 @@ export const fractoApis = createApi({
 			}),
 		}),
 
+		nftById: builder.query({
+			query: (data) => ({
+				url: `/nft/nft-data?id=${data}`,
+				method: "GET",
+			}),
+		}),
+
 		collectionById: builder.query({
 			query: (data) => ({
 				url: `/collection/collection?id=${data}`,
@@ -118,4 +125,5 @@ export const {
 	useDisconnectMutation,
 	useCollectionByIdQuery,
 	useEditCollectionMutation,
+	useNftByIdQuery,
 } = fractoApis;

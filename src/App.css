@@ -175,11 +175,17 @@ button.swal-button.swal-button--confirm:hover {
 .nft-collection {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
-	gap: 2em;
-	margin-top: 2em;
-	box-shadow: rgb(0 0 0 / 8%) 0px 4px 16px;
+	gap: 3em;
+	margin-top: 3em;
+	border-radius: 10px;
 }
 
 .nft-collection div {
 	box-shadow: rgb(0 0 0 / 8%) 0px 4px 16px;
+}
+
+.nft-collection img {
+	width: 100%;
+	border-radius: 10px 10px 0 0;
+	height: 250px;
 }

@@ -8,9 +8,11 @@ import { useListCategoryQuery, useAddNftMutation } from "../services/apis";
 import { PopUp } from "../utils/alert";
 import { ethers, Wallet } from "ethers";
 import Web3Modal from "web3modal";
-import { admin } from "../utils/web3/address";
+import { admin, collectionAddress } from "../utils/web3/address";
 import collectionABI from "../utils/web3/collectionABI.json";
+import { useNavigate } from "react-router-dom";
 const AddNft = () => {
+	const navigate = useNavigate();
 	const { data: listCat, refetch: listLoad } = useListCategoryQuery();
 	const [addNft, { data }] = useAddNftMutation();
 	const [image, setImage] = useState("");
@@ -20,6 +22,9 @@ const AddNft = () => {
 	const [link, setLink] = useState("");
 	const [category, setCategory] = useState("");
 	const [uuid, setUUid] = useState(0);
+	const [transactionHash, setTransactionHash] = useState(0);
+
+	const [loader, setLoader] = useState(false);
 
 	useEffect(() => {
 		function generateRandomNumber() {
@@ -41,11 +46,26 @@ const AddNft = () => {
 
 	useEffect(() => {
 		if (data?.success) {
-			alert("Nft created successfully");
+			PopUp("Nft created successfully", "", "success");
+			setLoader(false);
+			navigate("/admin");
 		}
 	}, [data]);
 
 	const handleNft = () => {
+		const formdata = new FormData();
+		formdata.append("category_id", category);
+		formdata.append("nft_name", name);
+		formdata.append("external_link", link);
+		formdata.append("description", description);
+		formdata.append("token_id", uuid);
+		formdata.append("nft_images", image);
+		formdata.append("transaction_id", transactionHash);
+
+		addNft(formdata);
+	};
+
+	const minNft = async () => {
 		if (!image) {
 			PopUp("Please select image", "", "error");
 			return;
@@ -61,26 +81,11 @@ const AddNft = () => {
 			return;
 		}
 
-		if (!link) {
-			PopUp("Please enetr link", "", "error");
-			return;
-		}
-
 		if (!category) {
 			PopUp("Please select category", "", "error");
 			return;
 		}
-		const formdata = new FormData();
-		formdata.append("category_id", category);
-		formdata.append("nft_name", name);
-		formdata.append("external_link", link);
-		formdata.append("description", description);
-		formdata.append("token_id", uuid);
-		formdata.append("nft_images", image);
-		addNft(formdata);
-	};
-
-	const payTaxValue = async () => {
+		setLoader(true);
 		try {
 			const web3Modal = new Web3Modal({
 				network: "mumbai",
@@ -90,20 +95,26 @@ const AddNft = () => {
 			const provider = await web3Modal.connect(providerOptions);
 			const ethersProvider = new ethers.providers.Web3Provider(provider);
 			const signer = ethersProvider.getSigner();
-			const token = new ethers.Contract(taxContract, Tax_ABI, signer);
+			const token = new ethers.Contract(
+				collectionAddress,
+				collectionABI,
+				signer
+			);
 
-			const tx = await token.safeMint(admin, collectionABI);
+			const tx = await token.safeMint(admin, uuid);
 			const result = await tx.wait();
+			setTransactionHash(result?.transactionHash);
 
+			console.log("RESUKLT", result);
 			if (result?.status === 1) {
-				// changeTaxStatus();
+				handleNft();
 			}
 		} catch (err) {
 			PopUp("User denied transaction", "", "error");
+			setLoader(false);
 		}
 	};
 
-	console.log(category, "XXXXXXXXXXXXXXXXXXXX");
 	return (
 		<>
 			<Navbar />
@@ -135,7 +146,11 @@ const AddNft = () => {
 										Upload your NFT image
 										{/* <span className="text-blue-600 underline">browse</span> */}
 									</span>
-									<img src={imageUrl} alt="" />
+									<img
+										src={imageUrl}
+										alt=""
+										style={{ width: "100%", height: "200px" }}
+									/>
 								</span>
 								<input
 									type="file"
@@ -209,8 +224,8 @@ const AddNft = () => {
 					</form>
 					<div className="form-button">
 						<button className="profile-btn">Cancel</button>
-						<button className="profile-btn" onClick={handleNft}>
-							Submit
+						<button className="profile-btn" onClick={minNft} disabled={loader}>
+							{loader ? "Submitting..." : "Submit"}
 						</button>
 					</div>
 				</div>
