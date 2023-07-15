@@ -6,7 +6,10 @@ import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
 import { useListCategoryQuery, useAddNftMutation } from "../services/apis";
 import { PopUp } from "../utils/alert";
-
+import { ethers, Wallet } from "ethers";
+import Web3Modal from "web3modal";
+import { admin } from "../utils/web3/address";
+import collectionABI from "../utils/web3/collectionABI.json";
 const AddNft = () => {
 	const { data: listCat, refetch: listLoad } = useListCategoryQuery();
 	const [addNft, { data }] = useAddNftMutation();
@@ -75,6 +78,29 @@ const AddNft = () => {
 		formdata.append("token_id", uuid);
 		formdata.append("nft_images", image);
 		addNft(formdata);
+	};
+
+	const payTaxValue = async () => {
+		try {
+			const web3Modal = new Web3Modal({
+				network: "mumbai",
+				cacheProvider: true,
+			});
+			const providerOptions = {};
+			const provider = await web3Modal.connect(providerOptions);
+			const ethersProvider = new ethers.providers.Web3Provider(provider);
+			const signer = ethersProvider.getSigner();
+			const token = new ethers.Contract(taxContract, Tax_ABI, signer);
+
+			const tx = await token.safeMint(admin, collectionABI);
+			const result = await tx.wait();
+
+			if (result?.status === 1) {
+				// changeTaxStatus();
+			}
+		} catch (err) {
+			PopUp("User denied transaction", "", "error");
+		}
 	};
 
 	console.log(category, "XXXXXXXXXXXXXXXXXXXX");
