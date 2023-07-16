@@ -62,9 +62,9 @@ const Navbar = () => {
 		navigate("/");
 	};
 
-	useEffect(() => {
-		dispatch(setLoginState(0));
-	}, []);
+	// useEffect(() => {
+	// 	dispatch(setLoginState(0));
+	// }, []);
 
 	useEffect(() => {
 		const handleAccountsChanged = (accounts) => {

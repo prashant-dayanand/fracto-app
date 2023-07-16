@@ -42,7 +42,8 @@ const ViewCollection = () => {
 								{listCat?.data?.wallet_address}
 							</p>
 							<p className="text-2xl text-gray-600 mt-6 font-bold">
-								Joined {moment(listCat?.data?.createdAt).format("DD MMM YYYY")}
+								Created on{" "}
+								{moment(listCat?.data?.createdAt).format("DD MMM YYYY")}
 							</p>
 							<p className="text-2xl text-gray-600 mt-6 ">
 								{listCat?.data?.description}

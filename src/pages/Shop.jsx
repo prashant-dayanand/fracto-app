@@ -3,11 +3,11 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import ProductCard from "../components/ProductCard";
-import { useNftListQuery } from "../services/apis";
+import { useMarketplaceQuery } from "../services/apis";
 import { useEffect } from "react";
 
 const Shop = () => {
-	const { data, refetch } = useNftListQuery();
+	const { data, refetch } = useMarketplaceQuery();
 
 	useEffect(() => {
 		refetch();

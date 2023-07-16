@@ -241,7 +241,7 @@ header .menu {
 	/* background: url("/bg2.png") no-repeat; */
 	background-position: center;
 	background-size: cover;
-	padding-top: 20rem;
+	padding-top: 30rem;
 	padding-bottom: 10rem;
 }
 
@@ -293,8 +293,6 @@ header .menu {
 }
 
 .container .image-container img {
-	margin-bottom: 10px;
-	border-radius: 5px;
 	width: 100%;
 }
 

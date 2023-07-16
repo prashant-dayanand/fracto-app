@@ -1,49 +1,174 @@
-import React from "react";
-import IMG from "../assets/image/4.png";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+
+import { useNftByIdQuery } from "../services/apis";
+import { useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import Modal from "../components/Modal/Modal";
+import { useSelector } from "react-redux";
+
+import { PopUp } from "../utils/alert";
+import { ethers } from "ethers";
+import Web3Modal from "web3modal";
+import { fractionAddress, collectionAddress } from "../utils/web3/address";
+import collectionABI from "../utils/web3/collectionABI.json";
+import fractionABI from "../utils/web3/fractionABI.json";
 const Product = () => {
+	const { id } = useParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+	const { data, refetch } = useNftByIdQuery(id);
+	const [loader, setLoader] = useState(false);
+	const [isShow, setIsShow] = useState(false);
+
+	const profileData = useSelector((state) => state.constants.profileData);
+
+	const [fractionAmount, setFractionAmount] = useState(false);
+
+	useEffect(() => {
+		refetch();
+	}, []);
+
+	console.log("profileData", profileData);
+
+	const handlePurchase = async () => {
+		setLoader(true);
+		try {
+			const web3Modal = new Web3Modal({
+				network: "mumbai",
+				cacheProvider: true,
+			});
+			const providerOptions = {};
+			const provider = await web3Modal.connect(providerOptions);
+			const ethersProvider = new ethers.providers.Web3Provider(provider);
+			const signer = ethersProvider.getSigner();
+			const token = new ethers.Contract(fractionAddress, fractionABI, signer);
+
+			const price = parseFloat(11).toFixed(12);
+
+			console.log("TOKEN", token);
+
+			const tx = await token.purchaseFraction(
+				collectionAddress,
+				data?.data?.token_id,
+				fractionAmount,
+				{
+					gasLimit: 1000000,
+					value: ethers.utils.parseEther(
+						(data?.data?.token_owner?.per_fraction_price * fractionAmount)
+							.toFixed(7)
+							.toString()
+					),
+				}
+			);
+			const result = await tx.wait();
+			// setTransactionHash(result?.transactionHash);
+
+			console.log("RESUKLT", result);
+			if (result?.status === 1) {
+				// handleSellNft();
+			}
+		} catch (err) {
+			PopUp("User denied transaction", "", "error");
+			console.log("ERR:::222222222222222222222222", err);
+
+			setLoader(false);
+		}
+	};
+
 	return (
 		<>
 			<Navbar />
-			<section className="gallery" id="gallery">
+			<section className="gallery mt-12" id="gallery">
 				<div className="product-container">
-					<div className="left-column">
-						<img data-image="red" className="active" src={IMG} alt />
+					<div className="">
+						<img
+							data-image="red"
+							className="active"
+							src={`http://localhost:4000/public/nftImage/${data?.data?.nft_media[0]}`}
+							style={{ height: "500px", width: "500px" }}
+							alt
+						/>
 					</div>
 					{/* Right Column */}
-					<div className="right-column">
-						<h1 style={{ color: "white" }}>Tyeb Mehta, Kali, 1997</h1>
-						<p>Acrylic on canvas, 30 x 35.9 inches</p>
-						<h3>$477.99</h3>
-						<p>
-							Quem tota utroque mea ea, nam blandit disputando te, sale volutpat
-							pri in. Mutat eleifend per ut, has ut nusquam accumsan mnesarchum.
-							Solum reque signiferumque ius ea. In primis eripuit menandri his,
-							usu modus munere at eos.
-						</p>
-						<select className="select">
+					<div className="right-column ml-10">
+						<h1 style={{ color: "white", padding: "0px", marginTop: "0px" }}>
+							{data?.data?.nft_name}
+						</h1>
+						<div>
+							<h4 className="text-2xl font-bold text-white mb-2 mt-4">
+								DESCRIPTION
+							</h4>
+							<p style={{ padding: "0px", fontSize: "15px", color: "#e2e2e2" }}>
+								{data?.data?.description}
+							</p>
+						</div>
+						<h3>{data?.data?.token_owner?.price} MATIC</h3>
+
+						{/* <select className="select">
 							<option selected>Choose color</option>
 							<option>Red</option>
 							<option>Blue</option>
 							<option>Black</option>
 							<option>Yellow</option>
-						</select>
+						</select> */}
 						<br />
-						<button className="btn">BUY NOW</button>
-						<a href="#">
+						{profileData?.data?.role !== "admin" && (
+							<input
+								type="number"
+								min="5"
+								style={{
+									border: "1px solid white",
+									marginBottom: "2em",
+									padding: ".5em 1em",
+									borderRadius: "5px",
+									fontSize: "14px",
+								}}
+								placeholder="Enter Fraction"
+								value={fractionAmount}
+								onChange={(e) => setFractionAmount(e.target.value)}
+							/>
+						)}
+
+						<br />
+						{profileData?.data?.role !== "admin" && (
+							<button
+								className="text-2xl"
+								onClick={() => {
+									if (!fractionAmount) {
+										PopUp("Please add define", "", "error");
+										return;
+									}
+
+									if (fractionAmount < 5) {
+										PopUp("Fraction should be greater than 5", "", "error");
+										return;
+									}
+
+									if (fractionAmount > data?.data?.token_owner?.amount) {
+										PopUp("Fraction is not available", "", "error");
+										return;
+									}
+									setIsShow(true);
+								}}
+								style={{ padding: ".5em 2em", borderRadius: "10px" }}
+							>
+								BUY NOW
+							</button>
+						)}
+
+						{/* <a href="#">
 							<img src="image/heart.png" alt="wishlist" />
 							Add to wishlist
-						</a>
+						</a> */}
 						<h6>
-							No. <span>082</span>
+							FRACTION <span>{location?.state?.item?.token_owner?.amount}</span>
 						</h6>
 						<h6>
-							Category <span>face</span>
+							Collection <span>face</span>
 						</h6>
-						<h6>
-							Tag <span>Cosmetic</span>
-						</h6>
+
 						<h6>Share</h6>
 						<a href="#" className="fab fa-facebook-f" />
 						<a href="#" className="fab fa-twitter" />
@@ -53,6 +178,52 @@ const Product = () => {
 				</div>
 			</section>
 			<Footer />
+
+			<Modal show={isShow} onClose={() => setIsShow(false)}>
+				<div className="flex items-center p-8 justify-center flex-col">
+					<h2 className="text-4xl font-bold text-center mb-12">Checkout</h2>
+					<div style={{ width: "100%" }}>
+						<div className="flex items-center justify-between w-full">
+							<h3 className="text-xl font-bold text-center mb-4">NFT NAME</h3>
+							<p className="text-xl text-center mb-4">{data?.data?.nft_name}</p>
+						</div>
+
+						<div className="flex items-center justify-between w-full">
+							<h3 className="text-xl font-bold text-center mb-4">
+								BUY FRACTION
+							</h3>
+							<p className="text-xl text-center mb-4">{fractionAmount}</p>
+						</div>
+
+						<div className="flex items-center justify-between w-full">
+							<h3 className="text-xl font-bold text-center mb-4">
+								Total Amount
+							</h3>
+							<p className="text-xl text-center mb-4">
+								{data?.data?.token_owner?.per_fraction_price * fractionAmount}
+							</p>
+						</div>
+
+						<div className="flex items-center  w-full mt-12 justify-around">
+							<button
+								className="btn btn-primary"
+								style={{ fontSize: "14px" }}
+								onClick={() => setIsShow(false)}
+							>
+								Cancel
+							</button>
+							<button
+								className="btn btn-primary"
+								style={{ fontSize: "14px" }}
+								onClick={handlePurchase}
+								disabled={loader}
+							>
+								{loader ? "Loading..." : "Confirm"}
+							</button>
+						</div>
+					</div>
+				</div>
+			</Modal>
 		</>
 	);
 };

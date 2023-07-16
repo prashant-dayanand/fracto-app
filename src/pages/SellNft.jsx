@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import IMG from "../assets/image/1.png";
 import { useNftByIdQuery } from "../services/apis";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { collectionAddress } from "../utils/web3/address";
 import { PopUp } from "../utils/alert";
 import { ethers, Wallet } from "ethers";
@@ -12,13 +11,17 @@ import Web3Modal from "web3modal";
 import { fractionAddress } from "../utils/web3/address";
 import collectionABI from "../utils/web3/collectionABI.json";
 import fractionABI from "../utils/web3/fractionABI.json";
+import { useSaleNftMutation } from "../services/apis";
 
 const SellNft = () => {
 	const { id } = useParams();
+	const navigate = useNavigate();
 	const { data, refetch } = useNftByIdQuery(id);
+	const [saleNft, { data: saleData }] = useSaleNftMutation();
 
 	const [amount, setAmount] = useState("");
 	const [factionPerPrice, setFractionPrice] = useState("");
+	const [loader, setLoader] = useState(false);
 
 	useEffect(() => {
 		refetch();
@@ -34,6 +37,8 @@ const SellNft = () => {
 			PopUp("please enter Fraction Per Price Value", "", "error");
 			return;
 		}
+
+		setLoader(true);
 
 		try {
 			const web3Modal = new Web3Modal({
@@ -62,7 +67,7 @@ const SellNft = () => {
 		} catch (err) {
 			PopUp("User denied transaction", "", "error");
 			console.log("ERR:::", err);
-			// setLoader(false);
+			setLoader(false);
 		}
 	};
 
@@ -97,17 +102,34 @@ const SellNft = () => {
 
 			console.log("RESUKLT", result);
 			if (result?.status === 1) {
-				// handleNft();
+				handleSellNft();
 			}
 		} catch (err) {
 			PopUp("User denied transaction", "", "error");
 			console.log("ERR:::222222222222222222222222", err);
 
-			// setLoader(false);
+			setLoader(false);
 		}
 	};
 
-	console.log(data, "datadatadata");
+	useEffect(() => {
+		if (saleData?.success) {
+			PopUp("NFT is on sale successfully", "", "success");
+			setLoader(false);
+			navigate("/admin");
+		}
+	}, [saleData]);
+
+	const handleSellNft = () => {
+		saleNft({
+			id: data?.data?._id,
+			price: Number(amount) * Number(factionPerPrice),
+			amount: amount,
+			fraction_amount: amount,
+			per_fraction_price: factionPerPrice,
+		});
+	};
+
 	return (
 		<>
 			<Navbar />
@@ -186,8 +208,12 @@ const SellNft = () => {
 					</form>
 					<div className="form-button">
 						<button className="profile-btn">Cancel</button>
-						<button className="profile-btn" onClick={handleApprove}>
-							Sell
+						<button
+							className="profile-btn"
+							onClick={handleApprove}
+							disabled={loader}
+						>
+							{loader ? "Submitting..." : "Submit"}
 						</button>
 					</div>
 				</div>

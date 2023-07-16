@@ -29,7 +29,7 @@ const AddNft = () => {
 	useEffect(() => {
 		function generateRandomNumber() {
 			let randomNumber =
-				Math.floor(Math.random() * 9000000000000) + 100000000000;
+				Math.floor(Math.random() * (234252345423 - 9) + 77712414123) + 234598;
 			return randomNumber;
 		}
 
@@ -146,11 +146,13 @@ const AddNft = () => {
 										Upload your NFT image
 										{/* <span className="text-blue-600 underline">browse</span> */}
 									</span>
-									<img
-										src={imageUrl}
-										alt=""
-										style={{ width: "100%", height: "200px" }}
-									/>
+									{imageUrl && (
+										<img
+											src={imageUrl}
+											alt=""
+											style={{ width: "100%", height: "200px" }}
+										/>
+									)}
 								</span>
 								<input
 									type="file"

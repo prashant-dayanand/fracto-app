@@ -245,10 +245,10 @@ header .menu {
 }
 
 .product-container .left-column {
-	width: 80% !important;
+	width: 70% !important;
 }
 .product-container .right-column {
-	width: 20%;
+	width: 30% !important;
 }
 
 .product-container .active {
@@ -264,38 +264,13 @@ header .menu {
 
 .container .image-container {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+	grid-template-columns: 1fr 1fr;
 	gap: 1.5rem;
 }
 
 .container .image-container img {
-	margin-bottom: 10px;
-	border-radius: 10px;
 	width: 100%;
 	height: 70%;
-}
-.container .image-container h3 {
-	font-size: 27px;
-	font-weight: 700;
-	color: #fff;
-	font-family: "Montserrat";
-	margin: 1rem 0;
-}
-
-.container .image-container p {
-	font-size: 16px;
-	font-weight: 400;
-	color: #fff;
-	font-family: "Montserrat";
-	margin: 1rem 0;
-}
-
-.container .image-container span {
-	font-size: 16px;
-	font-weight: 700;
-	color: #fff;
-	font-family: "Montserrat";
-	margin-bottom: 30px;
 }
 
 /* Gallery end  */

@@ -245,13 +245,6 @@ header .menu {
 	/* text-align: center; */
 }
 
-.product-container .left-column {
-	width: 50%;
-}
-.product-container .right-column {
-	width: 50%;
-}
-
 .product-container .active {
 	margin-bottom: 10px;
 	border-radius: 5px;
@@ -261,12 +254,10 @@ header .menu {
 	font-size: 48px;
 	font-weight: 700;
 	font-family: "Montserrat";
-	margin: 10px 0px;
 	color: #a12669;
 }
 .right-column p {
 	font-size: 19px;
-	margin: 10px 0px;
 	font-family: "Montserrat";
 	font-weight: 500;
 	color: #fff;
