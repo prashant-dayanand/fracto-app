@@ -1,14 +1,19 @@
 import React from "react";
 import { useNftListQuery } from "../services/apis";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Card from "../components/Card";
+import NoData from "../components/NoData";
 
 const MintedNfts = () => {
-	const navigate = useNavigate();
 	const { data, refetch } = useNftListQuery();
+
+	const [search, setSearch] = useState("");
+
 	useEffect(() => {
 		refetch();
 	}, []);
+
 	return (
 		<section>
 			<div className="flex items-center justify-between">
@@ -18,39 +23,27 @@ const MintedNfts = () => {
 					placeholder="Search NFT"
 					className="border-gray-300 px-4 py-2 text-2xl"
 					style={{
-						border: "1px solid #e2e2e2",
-						width: "30%",
+						border: "1px solid #b1b1b1",
+						width: "32%",
 						borderRadius: "5px",
 					}}
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
 				/>
 			</div>
+			{data?.data?.length === 0 && <NoData />}
+
 			<div className="nft-collection">
 				{data?.data?.length > 0 &&
-					data?.data?.map((item) => {
-						return (
-							<div>
-								<img
-									src={`http://localhost:4000/public/nftImage/${item?.nft_media[0]}`}
-									alt=""
-								/>
-								<div className="p-6" style={{ borderRadius: "0 0 10px 10px" }}>
-									<h2 className="text-4xl font-bold mb-6">{item?.nft_name}</h2>
-
-									<button
-										className="mt-6 font-bold mx-auto w-full py-2"
-										style={{
-											fontSize: "14px",
-											border: "2px solid #a12669 ",
-											borderRadius: "10px",
-										}}
-										onClick={() => navigate(`/sell/${item?._id}`)}
-									>
-										Sale
-									</button>
-								</div>
-							</div>
-						);
-					})}
+					data?.data
+						?.filter((obj) => obj.nft_name.toLowerCase().includes(search))
+						?.map((item) => {
+							return (
+								<>
+									<Card item={item} url={`/sell/${item?._id}`} />
+								</>
+							);
+						})}
 			</div>
 		</section>
 	);

@@ -134,22 +134,23 @@ const SellNft = () => {
 		<>
 			<Navbar />
 			<section className="bg-white mt-56 pb-32">
-				<div className="profile-container">
+				<div className="profile-container ">
 					<h2 className="text-6xl text-bold text-center mt-20">
 						Sell Your Art
 					</h2>
-
-					<div className="nft-desc mb-4">
-						<img
-							src={`http://localhost:4000/public/nftImage/${data?.data?.nft_media[0]}`}
-							alt=""
-							className="h-72 w-72 bg-gray-100 rounded"
-						/>
-						<div>
-							<h2 className="text-3xl text-bold">{data?.data?.nft_name}</h2>
-							<p className="text-xl mt-4 text-gray-600">
-								{data?.data?.description}
-							</p>
+					<div className="p-8 bg-gray-100 rounded-xl mt-12">
+						<div className="mb-4 flex" style={{ gap: "2em" }}>
+							<img
+								src={`http://localhost:4000/public/nftImage/${data?.data?.nft_media[0]}`}
+								alt=""
+								className="h-72 w-72 bg-gray-100 rounded-xl"
+							/>
+							<div>
+								<h2 className="text-4xl text-bold">{data?.data?.nft_name}</h2>
+								<p className="text-xl mt-4 text-gray-600">
+									{data?.data?.description}
+								</p>
+							</div>
 						</div>
 					</div>
 					<div className="h-10"></div>

@@ -217,6 +217,7 @@ const AddNft = () => {
 								id=""
 								onChange={(e) => setCategory(e.target.value)}
 							>
+								<option>Select</option>
 								{listCat?.data?.length > 0 &&
 									listCat?.data?.map((item) => {
 										return <option value={item?._id}>{item?.name}</option>;

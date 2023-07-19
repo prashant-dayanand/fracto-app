@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { usePurchaseNftMutation } from "../services/apis";
 
 import { useNftByIdQuery } from "../services/apis";
 import { useEffect } from "react";
@@ -26,6 +27,8 @@ const Product = () => {
 
 	const [fractionAmount, setFractionAmount] = useState(false);
 
+	const [purchaseNft, { data: nftPurchase }] = usePurchaseNftMutation();
+
 	useEffect(() => {
 		refetch();
 	}, []);
@@ -45,10 +48,6 @@ const Product = () => {
 			const signer = ethersProvider.getSigner();
 			const token = new ethers.Contract(fractionAddress, fractionABI, signer);
 
-			const price = parseFloat(11).toFixed(12);
-
-			console.log("TOKEN", token);
-
 			const tx = await token.purchaseFraction(
 				collectionAddress,
 				data?.data?.token_id,
@@ -63,20 +62,33 @@ const Product = () => {
 				}
 			);
 			const result = await tx.wait();
-			// setTransactionHash(result?.transactionHash);
 
 			console.log("RESUKLT", result);
 			if (result?.status === 1) {
-				// handleSellNft();
+				handlePurchaseNft();
 			}
 		} catch (err) {
 			PopUp("User denied transaction", "", "error");
-			console.log("ERR:::222222222222222222222222", err);
-
 			setLoader(false);
 		}
 	};
 
+	useEffect(() => {
+		if (nftPurchase?.success) {
+			PopUp("Nft sold successfully", "", "success");
+			setIsShow(false);
+			setFractionAmount("");
+			refetch();
+		}
+	}, [nftPurchase]);
+
+	const handlePurchaseNft = () => {
+		purchaseNft({
+			token_id: data?.data?._id,
+			amount: data?.data?.token_owner?.per_fraction_price * fractionAmount,
+			fractionPurchase: Number(fractionAmount),
+		});
+	};
 	return (
 		<>
 			<Navbar />
@@ -127,6 +139,11 @@ const Product = () => {
 								}}
 								placeholder="Enter Fraction"
 								value={fractionAmount}
+								disabled={
+									data?.data?.token_owner?.remaining_fraction === 0
+										? true
+										: false
+								}
 								onChange={(e) => setFractionAmount(e.target.value)}
 							/>
 						)}
@@ -135,6 +152,11 @@ const Product = () => {
 						{profileData?.data?.role !== "admin" && (
 							<button
 								className="text-2xl"
+								disabled={
+									data?.data?.token_owner?.remaining_fraction === 0
+										? true
+										: false
+								}
 								onClick={() => {
 									if (!fractionAmount) {
 										PopUp("Please add define", "", "error");
@@ -162,18 +184,72 @@ const Product = () => {
 							<img src="image/heart.png" alt="wishlist" />
 							Add to wishlist
 						</a> */}
-						<h6>
-							FRACTION <span>{location?.state?.item?.token_owner?.amount}</span>
-						</h6>
-						<h6>
-							Collection <span>face</span>
-						</h6>
 
-						<h6>Share</h6>
+						<div
+							className="w-full p-10 bg-white rounded-xl"
+							style={{
+								display: "grid",
+								gridTemplateColumns: "1fr 1fr",
+								gap: "2em",
+							}}
+						>
+							<div>
+								<h6 className="text-4xl" style={{ marginTop: "0px" }}>
+									TOTAL FRACTION
+								</h6>
+								<h5
+									className="font-bold text-4xl text-gray-100"
+									style={{ color: "black" }}
+								>
+									{data?.data?.token_owner?.amount}
+								</h5>
+							</div>
+
+							<div>
+								<h6 className="text-4xl" style={{ marginTop: "0px" }}>
+									FRACTION SOLD
+								</h6>
+								<h5
+									className="font-bold text-4xl text-gray-100"
+									style={{ color: "black" }}
+								>
+									{" "}
+									{data?.data?.token_owner?.amount -
+										data?.data?.token_owner?.remaining_fraction}
+								</h5>
+							</div>
+
+							<div>
+								<h6 className="text-4xl" style={{ marginTop: "0px" }}>
+									FRACTION PRICE
+								</h6>
+								<h5
+									className="font-bold text-4xl text-gray-100"
+									style={{ color: "black" }}
+								>
+									{data?.data?.token_owner?.price /
+										data?.data?.token_owner?.amount}
+								</h5>
+							</div>
+
+							<div>
+								<h6 className="text-4xl" style={{ marginTop: "0px" }}>
+									COLLECTION
+								</h6>
+								<h5
+									className="font-bold text-4xl text-gray-100"
+									style={{ color: "black" }}
+								>
+									Monkey
+								</h5>
+							</div>
+						</div>
+
+						{/* <h6>Share</h6>
 						<a href="#" className="fab fa-facebook-f" />
 						<a href="#" className="fab fa-twitter" />
 						<a href="#" className="fab fa-instagram" />
-						<a href="#" className="fab fa-linkedin" />
+						<a href="#" className="fab fa-linkedin" /> */}
 					</div>
 				</div>
 			</section>

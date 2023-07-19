@@ -84,6 +84,13 @@ export const fractoApis = createApi({
 			}),
 		}),
 
+		nftInCollection: builder.query({
+			query: (data) => ({
+				url: `/collection/listNftInCollection?collection_id=${data}`,
+				method: "GET",
+			}),
+		}),
+
 		nftList: builder.query({
 			query: () => ({
 				url: "nft/listNft",
@@ -119,6 +126,14 @@ export const fractoApis = createApi({
 			}),
 		}),
 
+		purchaseNft: builder.mutation({
+			query: (data) => ({
+				url: "/nft/purchase",
+				method: "POST",
+				body: data,
+			}),
+		}),
+
 		marketplace: builder.query({
 			query: (data) => ({
 				url: `nft/onSale`,
@@ -143,4 +158,6 @@ export const {
 	useNftByIdQuery,
 	useSaleNftMutation,
 	useMarketplaceQuery,
+	usePurchaseNftMutation,
+	useNftInCollectionQuery,
 } = fractoApis;

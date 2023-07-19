@@ -5,7 +5,10 @@ import IMG from "../assets/image/1.png";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useCollectionByIdQuery } from "../services/apis";
+import {
+	useCollectionByIdQuery,
+	useNftInCollectionQuery,
+} from "../services/apis";
 import moment from "moment";
 import { setLoginState } from "../services/slices/constants";
 
@@ -14,10 +17,14 @@ const ViewCollection = () => {
 	const { id } = useParams();
 
 	const { data: listCat, refetch: listLoad } = useCollectionByIdQuery(id);
+	const { data: nftList, refetch: nftCollection } = useNftInCollectionQuery(id);
 
 	useEffect(() => {
 		listLoad();
+		nftCollection();
 	}, []);
+
+	console.log(nftList, "nftList");
 
 	return (
 		<>

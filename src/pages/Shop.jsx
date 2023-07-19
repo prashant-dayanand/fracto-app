@@ -28,6 +28,11 @@ const Shop = () => {
 							</div>
 						</div>
 					</section>
+					{data?.data?.length === 0 && (
+						<div className="text-center mt-12 text-white text-4xl w-full">
+							No NFT here!
+						</div>
+					)}
 				</div>
 				<Sidebar />
 			</div>

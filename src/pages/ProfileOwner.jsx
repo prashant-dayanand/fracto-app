@@ -70,40 +70,59 @@ const ProfileOwner = () => {
 				</section>
 				<section>
 					<h2 className="mt-4 mb-4 text-4xl font-bold">Purchased NFTs</h2>
-					<table class="styled-table">
-						<thead>
-							<tr>
-								<th>SN</th>
-								<th>NFT NAME</th>
-								<th>PRICE</th>
-								<th>ADDRESS</th>
-								<th>ACTION</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>{" "}
-							<tr>
-								<td>1</td>
-								<td>Fracto Art</td>
-								<td>2 ETH</td>
-								<td>GIGJGJI...UIU</td>
-								<td>View</td>
-							</tr>{" "}
-						</tbody>
-					</table>
+					<div className="nft-collection">
+						<div>
+							<img
+								src={`http://localhost:4000/public/userImage/${data?.data?.display_picture}`}
+								alt=""
+							/>
+							<div className="p-6">
+								<h2 className="text-2xl font-bold mb-2">
+									Azuki NFT from original
+								</h2>
+								<strong className="font-bold text-3xl">12 MATIC</strong>
+							</div>
+						</div>
+
+						<div>
+							<img
+								src={`http://localhost:4000/public/userImage/${data?.data?.display_picture}`}
+								alt=""
+							/>
+							<div className="p-6">
+								<h2 className="text-2xl font-bold mb-2">
+									Azuki NFT from original
+								</h2>
+								<strong className="font-bold text-3xl">12 MATIC</strong>
+							</div>
+						</div>
+
+						<div>
+							<img
+								src={`http://localhost:4000/public/userImage/${data?.data?.display_picture}`}
+								alt=""
+							/>
+							<div className="p-6">
+								<h2 className="text-2xl font-bold mb-2">
+									Azuki NFT from original
+								</h2>
+								<strong className="font-bold text-3xl">12 MATIC</strong>
+							</div>
+						</div>
+
+						<div>
+							<img
+								src={`http://localhost:4000/public/userImage/${data?.data?.display_picture}`}
+								alt=""
+							/>
+							<div className="p-6">
+								<h2 className="text-2xl font-bold mb-2">
+									Azuki NFT from original
+								</h2>
+								<strong className="font-bold text-3xl">12 MATIC</strong>
+							</div>
+						</div>
+					</div>
 				</section>
 			</div>
 			<Footer />
