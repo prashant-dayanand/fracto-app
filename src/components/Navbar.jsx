@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "./Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
 	setLoginState,
 	setProfileData,
@@ -32,6 +33,8 @@ const Navbar = () => {
 	const [isMetamaskConnected, setIsMetamaskConnected] = useState(true);
 	const [address, setAddress] = useState("");
 	const [walletBalance, setWalletBalance] = useState(0);
+
+	const [copy, setCopy] = useState(false);
 
 	console.log("address", data);
 
@@ -199,8 +202,24 @@ const Navbar = () => {
 				<div className="flex items-center p-8 justify-center flex-col">
 					<div className="pb-20 text-center">
 						<span className="text-4xl font-bold">Set Display Name</span>
-						<div className="mt-6 text-gray-700 text-2xl">
-							<span>{walletInfo?.address}</span>
+						<div className="mt-6 text-gray-700 text-2xl bg-gray-100 pt-4 pb-4 rounded-full shadow-lg">
+							<span>
+								{walletInfo?.address.substring(0, 5) +
+									"..." +
+									walletInfo?.address.slice(-5)}
+							</span>
+							<CopyToClipboard
+								text={walletInfo?.address}
+								onCopy={() => setCopy(true)}
+							>
+								<span>
+									{copy ? (
+										<i class="fa-solid fa-circle-check ml-6 text-3xl text-green-600"></i>
+									) : (
+										<i class="fa-regular fa-copy ml-6 text-3xl text-purple-600"></i>
+									)}
+								</span>
+							</CopyToClipboard>
 						</div>
 					</div>
 					<div className="text-center border-solid border-2 border-gray-300 py-8 px-28">

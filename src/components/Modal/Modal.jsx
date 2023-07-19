@@ -28,11 +28,11 @@ const Modal = ({ modalStyle, children, show, onClose, backdropStyle }) => {
 					<button
 						onClick={onClose}
 						className="ml-auto py-0 px-2"
-						style={{ border: "none", background: "#e5e5e5", zIndex: 1 }}
+						style={{ border: "none", zIndex: 1 }}
 					>
 						<i
 							class="fa-solid fa-xmark bold"
-							style={{ color: "#444", fontSize: "14px" }}
+							style={{ color: "#444", fontSize: "18px" }}
 						></i>
 					</button>
 					{children}

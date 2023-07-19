@@ -241,8 +241,9 @@ header .menu {
 	/* background: url("/bg2.png") no-repeat; */
 	background-position: center;
 	background-size: cover;
-	padding-top: 30rem;
-	padding-bottom: 10rem;
+	padding-top: 20rem;
+	padding-bottom: 20rem;
+	height: 100vh;
 }
 
 .home .content {
